@@ -1,0 +1,157 @@
+{
+    "name": "select-to-line",
+    "displayName": "Select to Line...",
+    "description": "A superset of the 'Go to Line...' feature in VS Code with the ability to select lines in the document.",
+    "version": "0.0.1",
+    "publisher": "OnlyLys",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:OnlyLys/Select-To-Line.git"
+    },
+    "homepage": "https://github.com/OnlyLys/Select-To-Line",
+    "bugs": {
+        "url": "https://github.com/OnlyLys/Select-To-Line/issues"
+    },
+    "engines": {
+        "vscode": "^1.38.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "selection",
+        "select to",
+        "select range",
+        "select from",
+        "select lines"
+    ],
+    "activationEvents": [
+        "onCommand:select-to-line.open"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Select To Line... Configuration",
+            "properties": {
+                "select-to-line.defaultHorizontalBehavior": {
+                    "type": "string",
+                    "enum": [
+                        "h",
+                        "H",
+                        "l",
+                        "L"
+                    ],
+                    "default": "h",
+                    "markdownDescription": "The default horizontal behavior if a character number is not specified.\n\n-`h`: Move cursor to the first non-whitespace character of the line\n\n-`H`: Move cursor to the start of the line\n\n-`l`: Move cursor to one past the last non-whitespace character of the line\n\n-`L`: Move cursor to the end of the line "
+                },
+                "select-to-line.colors.pseudocursor": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    ],
+                    "default": {
+                        "id": "editorCursor.foreground"
+                    },
+                    "examples": [
+                        "red",
+                        "#ffffff"
+                    ],
+                    "markdownDescription": "Specifiy the color of the pseudocursors that are used to decorate the ends of a selection preview. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
+                },
+                "select-to-line.colors.selectionHighlight": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    ],
+                    "default": {
+                        "id": "editor.selectionBackground"
+                    },
+                    "examples": [
+                        "green",
+                        "#ffffff"
+                    ],
+                    "markdownDescription": "Specifiy the color of the highlight when a selected region is previewed. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
+                },
+                "select-to-line.colors.goToLineHighlight": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    ],
+                    "default": {
+                        "id": "editor.inactiveSelectionBackground"
+                    },
+                    "examples": [
+                        "grey",
+                        "#ffffff"
+                    ],
+                    "markdownDescription": "Specifiy how the line is highlighted when previewing the target location of a 'Go To Line...' command. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
+                },
+                "select-to-line.viewportChangeDelay": {
+                    "type": "number",
+                    "default": 150,
+                    "minimum": 0,
+                    "markdownDescription": "Delay (in milliseconds) before revealing a selection if the selection is outside the current viewport. Set this to `0` to have no delay."
+                }
+            }
+        },
+        "commands": [
+            {
+                "command": "select-to-line.open",
+                "title": "Open Dialog",
+                "category": "Select To Line..."
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "select-to-line.open",
+                "key": "ctrl+g"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run build",
+        "build": "tsc --build",
+        "watch": "tsc --watch",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run build && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^10.14.17",
+        "tslint": "^5.20.0",
+        "typescript": "^3.6.2",
+        "vscode": "^1.1.36"
+    },
+    "dependencies": {
+        "@onlylys/vscode-configuration-handler": "git+https://github.com/OnlyLys/VSCode-Configuration-Handler.git#0.1.0"
+    }
+}
