@@ -63,13 +63,13 @@ function interpretTarget(
                 const { end, quick } = interpretRangeEnd(varTarget.end, editor, config);
                 return {
                     kind: 'selection',
-                    target: quick ? new Selection(start, end) : quickSelection(start, end)
+                    selection: quick ? new Selection(start, end) : quickSelection(start, end)
                 };
             } else {
                 // No end position means we just have a position to 'go to'.
                 return { 
                     kind: 'goTo', 
-                    target: start 
+                    position: start 
                 };
             }
         }
@@ -79,7 +79,7 @@ function interpretTarget(
             const { end, quick } = interpretRangeEnd(varTarget.end, editor, config);
             return {
                 kind: 'selection',
-                target: quick ? new Selection(cursor, end) : quickSelection(cursor, end)
+                selection: quick ? new Selection(cursor, end) : quickSelection(cursor, end)
             };
         }
     }

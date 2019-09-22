@@ -13,10 +13,10 @@ export type Target = TargetGoTo | TargetSelection;
 
     interface TargetGoTo {
         kind: 'goTo';
-        target: Position;
+        position: Position;
     }
 
     interface TargetSelection {
         kind: 'selection';
-        target: Selection;
+        selection: Selection;
     }
