@@ -1,10 +1,10 @@
 import { ThemeColor } from 'vscode';
-import { EXT_IDENT } from './extension';
+import { EXT_IDENT } from '../extension';
 import { ConfigurationHandler } from '@onlylys/vscode-configuration-handler';
-import { TERMINAL } from './grammar/terminal';
+import { COLUMN_DEFAULTS_TO } from './column-defaults-to';
 
-/** Class containing a readonly snapshot of the configuration values of this extension. */
-export class Configuration {
+/** A readonly snapshot of the configuration values of this extension. */
+export class Config {
 
     /** Color of the pseudocursor when revealing the target of a 'Go To' or selection. */
     public readonly pseudocursorColor: string | ThemeColor;
@@ -21,20 +21,20 @@ export class Configuration {
      */
     public readonly viewportChangeDelay: number;
 
-    /** The default behavior to use for the character term if it is omitted. */
-    public readonly defaultCharacterBehavior: TERMINAL;
+    /** What the column number defaults to if it is not specified. */
+    public columnDefaultsTo: COLUMN_DEFAULTS_TO;
 
     private constructor() {
         this.pseudocursorColor        = pseudocursorColorHandler.get().effectiveValue;
         this.selectionHighlightColor  = selectionHighlightColorHandler.get().effectiveValue;
         this.goToLineHighlightColor   = goToLineHighlightColorHandler.get().effectiveValue;
         this.viewportChangeDelay      = viewportChangeDelayHandler.get().effectiveValue;
-        this.defaultCharacterBehavior = defaultCharacterBehaviorHandler.get().effectiveValue;
+        this.columnDefaultsTo         = columnDefaultsToHandler.get().effectiveValue;
     }
 
     /** Get the latest values of the extension's settings. */
-    public static get(): Configuration {
-        return new Configuration();
+    public static get(): Config {
+        return new Config();
     }
 
 }
@@ -64,17 +64,17 @@ export const viewportChangeDelayHandler = new ConfigurationHandler<number>({
     typecheck: (value: any): value is number => typeof value === 'number'
 });
 
-// Only these possibilities for default behavior are allowed when a character term is not specified
-const DEFAULT_CHARACTER_BEHAVIOR_TERMINALS = [
-    TERMINAL.START_OF_LINE_SHORTCUT,
-    TERMINAL.END_OF_LINE_SHORTCUT,
-    TERMINAL.FIRST_NON_WHITESPACE_CHARACTER_SHORTCUT,
-    TERMINAL.ONE_PAST_LAST_NON_WHITESPACE_CHARACTER_SHORTCUT,
-];
-
-export const defaultCharacterBehaviorHandler = new ConfigurationHandler<TERMINAL>({
+export const columnDefaultsToHandler = new ConfigurationHandler<COLUMN_DEFAULTS_TO>({
     name: `${EXT_IDENT}.defaultCharacterBehavior`,
-    typecheck: (value: any): value is TERMINAL => {
-        return DEFAULT_CHARACTER_BEHAVIOR_TERMINALS.includes(value);
+    typecheck: (value: any): value is COLUMN_DEFAULTS_TO => {
+        switch (value) {
+            case COLUMN_DEFAULTS_TO.START_OF_LINE:
+            case COLUMN_DEFAULTS_TO.END_OF_LINE:
+            case COLUMN_DEFAULTS_TO.FIRST_NON_WHITESPACE_CHARACTER_OF_LINE:
+            case COLUMN_DEFAULTS_TO.ONE_PAST_LAST_NON_WHITESPACE_CHARACTER_OF_LINE:
+                return true;
+            default:
+                return false;
+        }
     }
 });
