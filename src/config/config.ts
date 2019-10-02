@@ -1,19 +1,18 @@
 import { ThemeColor } from 'vscode';
-import { EXT_IDENT } from '../extension';
 import { ConfigurationHandler } from '@onlylys/vscode-configuration-handler';
 import { COLUMN_DEFAULTS_TO } from './column-defaults-to';
 
 /** A readonly snapshot of the configuration values of this extension. */
 export class Config {
 
-    /** Color of the pseudocursor when revealing the target of a 'Go To' or selection. */
+    /** Color of the pseudocursor when revealing the target of a 'go to' or selection. */
     public readonly pseudocursorColor: string | ThemeColor;
-    
-    /** Color used to highlight the target range of a selection. */
-    public readonly selectionHighlightColor: string | ThemeColor;
 
-    /** Color used to highlight the target line of a 'Go To'. */
-    public readonly goToLineHighlightColor: string | ThemeColor;
+    /** Color used to highlight the target line(s) of a 'go to' or 'Quick Selection' operation. */
+    public readonly lineHighlightColor: string | ThemeColor;
+
+    /** Color used to highlight the target range of a selection. */
+    public readonly rangeHighlightColor: string | ThemeColor;
     
     /** 
      * The delay in `ms` before changing the viewport to reveal a target that is partially or totally
@@ -25,11 +24,11 @@ export class Config {
     public columnDefaultsTo: COLUMN_DEFAULTS_TO;
 
     private constructor() {
-        this.pseudocursorColor        = pseudocursorColorHandler.get().effectiveValue;
-        this.selectionHighlightColor  = selectionHighlightColorHandler.get().effectiveValue;
-        this.goToLineHighlightColor   = goToLineHighlightColorHandler.get().effectiveValue;
-        this.viewportChangeDelay      = viewportChangeDelayHandler.get().effectiveValue;
-        this.columnDefaultsTo         = columnDefaultsToHandler.get().effectiveValue;
+        this.pseudocursorColor   = pseudocursorColorHandler.get().effectiveValue;
+        this.lineHighlightColor  = lineHighlightColorHandler.get().effectiveValue;
+        this.rangeHighlightColor = rangeHighlightColorHandler.get().effectiveValue;
+        this.viewportChangeDelay = viewportChangeDelayHandler.get().effectiveValue;
+        this.columnDefaultsTo    = columnDefaultsToHandler.get().effectiveValue;
     }
 
     /** Get the latest values of the extension's settings. */
@@ -44,28 +43,27 @@ function isColorType(value: any): value is (string | ThemeColor) {
 }
 
 export const pseudocursorColorHandler = new ConfigurationHandler<string | ThemeColor>({
-    name: `${EXT_IDENT}.pseudocursorColor`,
+    name: `select-to-line.pseudocursorColor`,
     typecheck: isColorType
 });
 
-export const selectionHighlightColorHandler = new ConfigurationHandler<string | ThemeColor>({
-    name: `${EXT_IDENT}.selectionHighlightColor`,
+export const rangeHighlightColorHandler = new ConfigurationHandler<string | ThemeColor>({
+    name: `select-to-line.rangeHighlightColor`,
     typecheck: isColorType
 });
 
-export const goToLineHighlightColorHandler = new ConfigurationHandler<string | ThemeColor>({
-    name: `${EXT_IDENT}.goToLineHighlightColor`,
+export const lineHighlightColorHandler = new ConfigurationHandler<string | ThemeColor>({
+    name: `select-to-line.lineHighlightColor`,
     typecheck: isColorType
 });
-
 
 export const viewportChangeDelayHandler = new ConfigurationHandler<number>({
-    name: `${EXT_IDENT}.viewportChangeDelay`,
+    name: `select-to-line.viewportChangeDelay`,
     typecheck: (value: any): value is number => typeof value === 'number'
 });
 
 export const columnDefaultsToHandler = new ConfigurationHandler<COLUMN_DEFAULTS_TO>({
-    name: `${EXT_IDENT}.defaultCharacterBehavior`,
+    name: `select-to-line.columnDefaultsTo`,
     typecheck: (value: any): value is COLUMN_DEFAULTS_TO => {
         switch (value) {
             case COLUMN_DEFAULTS_TO.START_OF_LINE:

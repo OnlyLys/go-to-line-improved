@@ -35,18 +35,7 @@
             "type": "object",
             "title": "Select To Line...",
             "properties": {
-                "select-to-line.columnDefaultsTo": {
-                    "type": "string",
-                    "enum": [
-                        "startOfLine",
-                        "endOfLine",
-                        "firstNonWhitespaceCharacterOfLine",
-                        "onePastLastNonWhitespaceCharacterOfLine"
-                    ],
-                    "default": "firstNonWhitespaceCharacterOfLine",
-                    "markdownDescription": "The column to default to if it is not specified."
-                },
-                "select-to-line.colors.pseudocursor": {
+                "select-to-line.pseudocursorColor": {
                     "oneOf": [
                         {
                             "type": "string"
@@ -69,7 +58,7 @@
                     ],
                     "markdownDescription": "Specifiy the color of the pseudocursors that are used to decorate the ends of a selection preview. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
                 },
-                "select-to-line.colors.selectionHighlight": {
+                "select-to-line.rangeHighlightColor": {
                     "oneOf": [
                         {
                             "type": "string"
@@ -90,9 +79,9 @@
                         "green",
                         "#ffffff"
                     ],
-                    "markdownDescription": "Specifiy the color of the highlight when a selection is previewed. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
+                    "markdownDescription": "Specifiy the highlight color when a selection is previewed. 'quick selection's do not use this color. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
                 },
-                "select-to-line.colors.goToLineHighlight": {
+                "select-to-line.lineHighlightColor": {
                     "oneOf": [
                         {
                             "type": "string"
@@ -113,13 +102,24 @@
                         "grey",
                         "#ffffff"
                     ],
-                    "markdownDescription": "Specifiy how the line is highlighted when previewing the target of a 'go to' command. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
+                    "markdownDescription": "Specifiy how the line(s) are highlighted when previewing the target of a 'go to' or 'quick selection' command. Colors can be specified in two formats: either with a string containing an [RGB color](https://code.visualstudio.com/docs/getstarted/theme-color-reference), or with a [`ThemeColor`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ThemeColor). `ThemeColor`s can be created with an object literal, see the default value of this setting for an example."
                 },
                 "select-to-line.viewportChangeDelay": {
                     "type": "number",
                     "default": 150,
                     "minimum": 0,
                     "markdownDescription": "Delay (in milliseconds) before revealing a selection if the selection is outside the current viewport. Set this to `0` to have no delay."
+                },
+                "select-to-line.columnDefaultsTo": {
+                    "type": "string",
+                    "enum": [
+                        "startOfLine",
+                        "endOfLine",
+                        "firstNonWhitespaceCharacterOfLine",
+                        "onePastLastNonWhitespaceCharacterOfLine"
+                    ],
+                    "default": "firstNonWhitespaceCharacterOfLine",
+                    "markdownDescription": "The column to default to if it is not specified."
                 }
             }
         },

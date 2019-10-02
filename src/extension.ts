@@ -1,12 +1,10 @@
 import { ExtensionContext, commands, window } from 'vscode';
 import { Controller } from './controller';
 
-export const EXT_NAME  = 'Select to Line...';           // Extension name
-export const EXT_IDENT = 'select-to-line';           // Extension identifier
 
 export function activate(context: ExtensionContext) {
     const controller = new Controller();
-    const openCommand = commands.registerCommand(`${EXT_IDENT}.open`, () => {
+    const openCommand = commands.registerCommand(`select-to-line.open`, () => {
         if (window.activeTextEditor) {
             controller.show(window.activeTextEditor);
         } else {
@@ -17,5 +15,5 @@ export function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {
-    // Intentionally empty
+    // Intentionally empty.
 }
