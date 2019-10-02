@@ -63,7 +63,7 @@ function interpretTarget(
                 const { end, quick } = interpretRangeEnd(varTarget.end, editor, config);
                 return {
                     kind: 'selection',
-                    selection: quick ? new Selection(start, end) : quickSelection(start, end),
+                    selection: quick ? quickSelection(start, end) : new Selection(start, end),
                     quick
                 };
             } else {
@@ -80,7 +80,7 @@ function interpretTarget(
             const { end, quick } = interpretRangeEnd(varTarget.end, editor, config);
             return {
                 kind: 'selection',
-                selection: quick ? new Selection(cursor, end) : quickSelection(cursor, end),
+                selection: quick ? quickSelection(cursor, end) : new Selection(cursor, end),
                 quick
             };
         }
