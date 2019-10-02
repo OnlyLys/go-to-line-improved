@@ -5,10 +5,10 @@ import { Selection, Position } from 'vscode';
  * 
  * There are two kinds of targets:
  * 1. A position to move the cursor to (i.e. a 'go to').
- * 2. A range to make a selection of. This is a distillation of the various different ways that we
- *    were able to specify a selection (such as 'quick select', 'select from cursor', etc.). For 
- *    more information please see the usage guide.
-*/
+ * 2. A range to make a selection of. The `quick` flag specifies whether the selection was a 'quick
+ *    selection' or not. For more information about the different kinds of selections please see the 
+ *    readme.
+ */
 export type Target = TargetGoTo | TargetSelection;
 
     interface TargetGoTo {
@@ -19,4 +19,5 @@ export type Target = TargetGoTo | TargetSelection;
     interface TargetSelection {
         kind: 'selection';
         selection: Selection;
+        quick: boolean;
     }
