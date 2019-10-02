@@ -7,8 +7,6 @@ export function activate(context: ExtensionContext) {
     const openCommand = commands.registerCommand(`select-to-line.open`, () => {
         if (window.activeTextEditor) {
             controller.show(window.activeTextEditor);
-        } else {
-            controller.showDisabled();
         }
     });
     context.subscriptions.push(openCommand, controller);

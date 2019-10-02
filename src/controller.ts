@@ -88,20 +88,6 @@ export class Controller {
 
     }
 
-    /** Show a dialog that does nothing but reject input. */
-    public showDisabled(): void {
-        this.dispose();
-        const dialog = new Dialog({
-            placeholder: '',
-            validate: () => { 
-                return { 
-                    ok: false, 
-                    message: `Open a text file first to use ${EXT_NAME}` 
-                }; 
-            },
-            onDidAccept: () => false,
-            onDidHideViaEscapeOrFocusChange: () => {},
-            onDidHideViaSelectionInterrupt:  () => {}
         });
         this.disposables.push(dialog);
     }
