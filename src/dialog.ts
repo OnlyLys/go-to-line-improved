@@ -4,7 +4,7 @@ import { window, InputBox, Disposable } from 'vscode';
  * A dialog box that allows us to specify reactions to user input. This class only provides the 
  * framework of the dialog, while the implemention is defined at construction time.
  * 
- * Note that this class is 'self-disposing'. In circumstances where the dialog is hidden, `dispose`
+ * Note that this class is 'self-disposing'. In circumstances where the dialog is hidden, `close`
  * will be called automatically.
  */
 export class Dialog {
@@ -81,7 +81,7 @@ export class Dialog {
         this.inputBox.show();
         this.inputBox.placeholder = behavior.placeholder;
 
-        // Make sure that the dialog box shows the correct feedback at initialization 
+        // Make sure that the dialog box shows the correct feedback at initialization.
         showFeedback(this.inputBox, behavior.validate(this.inputBox.value));
 
         this.onDidChangeListener = this.inputBox.onDidChangeValue(() =>
@@ -90,22 +90,22 @@ export class Dialog {
 
         this.selectionChangeListener = window.onDidChangeTextEditorSelection(() => {
             behavior.onDidHideViaSelectionInterrupt();
-            // Because we call dispose here, `this.onDidHideListener` is not subsequently triggered 
-            this.dispose();
+            // Because we call dispose here, `this.onDidHideListener` is not subsequently triggered.
+            this.close();
         });
 
         this.onDidAccept = this.inputBox.onDidAccept(() => {
             if (behavior.onDidAccept(this.inputBox.value)) {
-                this.dispose();
+                this.close();
             }
         });
 
         this.onDidHideListener = this.inputBox.onDidHide(() => { 
-            /* Since both `this.selectionChangeListener` and `this.onDidAccept` call `this.dispose`
-            at the end of their execution, this callback only executes when the input box is hidden
-            via `Escape` keypress or and editor tab change. */
+            // Since both `this.selectionChangeListener` and `this.onDidAccept` call `this.close`
+            // at the end of their execution, this callback only executes when the input box is 
+            // hidden via `Escape` keypress or and editor tab change.
             behavior.onDidHideViaEscapeOrFocusChange(); 
-            this.dispose();
+            this.close();
         });
 
         function showFeedback(inputBox: InputBox, result: { ok: boolean, message: string }): void {
@@ -120,16 +120,21 @@ export class Dialog {
         }
     }
 
-    /** Immediately close the dialog box. */
-    public dispose(): void {
+    /** Close the dialog box. */
+    public close(): void {
         this.onDidChangeListener.dispose();
         this.onDidAccept.dispose();
         this.selectionChangeListener.dispose();
-        /* Must dispose `this.onDidHideListener` before `this.inputBox`, because when the latter
-        is disposed of, it triggers `this.onDidHideListener`, which will then call `this.dispose` 
-        at the end of its execution and cause infinite recursion. */
+        // Must dispose `this.onDidHideListener` before `this.inputBox`, because when the latter
+        // is disposed of, it triggers `this.onDidHideListener`, which will then call `this.close` 
+        // at the end of its execution and cause infinite recursion.
         this.onDidHideListener.dispose();
         this.inputBox.dispose();
+    }
+
+    /** Equivalent to calling `close`. */
+    public dispose(): void {
+        this.close();
     }
 
 }
