@@ -6,9 +6,13 @@ export class Delayer {
 
     /** 
      * The time duration before execution of a queued event is determined by the `duration` field. 
-     * This constructor throws if `duration` is a negative value.
+     * This constructor throws if `duration` is negative.
      */
-    public constructor(private duration: number) {}
+    public constructor(private duration: number) {
+        if (duration < 0) {
+            throw new Error('error: cannot use negative `duration` value for `Delayer`.');
+        }
+    }
 
     /** 
      * Queue an action to be executed at a delay. Only a maximum of one action can be queued at any 
