@@ -102,15 +102,15 @@ This document describes the grammar of the input.
             2. <TARGET> -> <RANGE_END>
 
         FIRST: 
-            /[0-9]+/, 1
-            /-/,      1
-            /(,|:)/,  1
-            /H/,      1
-            /L/,      1
-            /h/,      1
-            /l/,      1
-            /\./,     2
-            /\.\./,   2
+            /[0-9]+/,  1
+            /-[0-9]+/, 1
+            /(,|:)/,   1
+            /H/,       1
+            /L/,       1
+            /h/,       1
+            /l/,       1
+            /\./,      2
+            /\.\./,    2
 
 
     <OPTIONAL_RANGE_END>
@@ -145,24 +145,24 @@ This document describes the grammar of the input.
             2. <POSITION> -> <COLUMN>
 
         FIRST: 
-            /[0-9]+/, 1
-            /-/,      1
-            /(,|:)/,  2
-            /H/,      2
-            /L/,      2
-            /h/,      2
-            /l/,      2
+            /[0-9]+/,  1
+            /-[0-9]+/, 1
+            /(,|:)/,   2
+            /H/,       2
+            /L/,       2
+            /h/,       2
+            /l/,       2
 
 
     <LINE>
 
         PRODUCTIONS:
             1. <LINE> -> /[0-9]+/
-            2. <LINE> -> /-//[0-9]+/
+            2. <LINE> -> /-[0-9]+/
 
         FIRST:
             /[0-9]+/,  1
-            /-/,       2
+            /-[0-9]+/, 2
 
 
     <OPTIONAL_COLUMN>
