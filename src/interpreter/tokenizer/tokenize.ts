@@ -12,68 +12,87 @@ export function tokenize(input: string): TokenStream | undefined {
         if (input[i].trim() === '') {
             continue;
         }
-        switch (input[i]) {
-            case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': {
-                // Since a number is a continuous sequence of digits, once we encounter the leading 
-                // digit we have to look ahead to see if there are any more that follow.
-                const digitStart = i;
-                outer: 
-                    while (i + 1 < input.length) {
-                        switch (input[i + 1]) {
-                            case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': {
-                                // The digits that follow are consumed from the input string.
-                                ++i;
-                                continue;
-                            }
-                            default:  {
-                                break outer;
-                            }
-                        }
-                    }
-                tokens.push({ kind: 'number', valueStr: input.substring(digitStart, i + 1) });
-                break;
+        if (isDigit(input[i])) {
+            let magnitude = toDigit(input[i]) as number;
+            // Consume until the end of the number.
+            while (i + 1 < input.length && isDigit(input[i + 1])) {
+                magnitude = (magnitude * 10) + ++i;
             }
-            case '-': {
-                tokens.push({ kind: 'minus' });
-                break;
+            tokens.push({ kind: 'number', magnitude });
+        } 
+        else if (input[i] === '-' && i + 1 < input.length && isDigit(input[i + 1])) {
+            // Increment `i` to skip the `-` sign.
+            let magnitude = toDigit(input[++i]) as number;
+            // Consume the number following the `-` sign.
+            while (i + 1 < input.length && isDigit(input[i + 1])) {
+                magnitude = (magnitude * 10) + ++i;
             }
-            case ',':
-            case ':': {
-                tokens.push({ kind: 'commaOrColon' });
-                break;
-            } 
-            case '.': {
-                // Since the `..` operator also starts with `.`, we have to look ahead by 1 character
-                // to decide which operator is being used. 
-                if (i + 1 < input.length && input[i + 1] === '.') {
-                    tokens.push({ kind: 'doublePeriod' });
-                    // Consume the second period from the input string.
-                    ++i;
-                } else {
-                    tokens.push({ kind: 'period' });
-                }
-                break;
+            tokens.push({ kind: 'negativeNumber', magnitude });
+        } 
+        else if (input[i] === ',' || input[i] === ':') {
+            tokens.push({ kind: 'commaOrColon' });
+        } 
+        else if (input[i] === '.') {
+            // Lookahead by 1 character to decide whether the `.` or `..` operator is being used. 
+            if (i + 1 < input.length && input[i + 1] === '.') {
+                tokens.push({ kind: 'doublePeriod' });
+                ++i;
+            } else {
+                tokens.push({ kind: 'period' });
             }
-            case 'H': {
-                tokens.push({ kind: 'H' });
-                break;
-            }
-            case 'L': {
-                tokens.push({ kind: 'L' });
-                break;
-            }
-            case 'h': {
-                tokens.push({ kind: 'h' });
-                break;
-            }
-            case 'l': {
-                tokens.push({ kind: 'l' });
-                break;
-            }
-            default: {
-                return undefined;
-            }
+        } 
+        else if (input[i] === 'H') {
+            tokens.push({ kind: 'H' });
+        } 
+        else if (input[i] === 'L') {
+            tokens.push({ kind: 'L' });
+        } 
+        else if (input[i] === 'h') {
+            tokens.push({ kind: 'h' });
+        } 
+        else if (input[i] === 'l') {
+            tokens.push({ kind: 'l' });
+        } 
+        else {
+            return undefined;
         }
     }
     return new TokenStream(tokens);
+}
+
+function isDigit(char: string): boolean {
+    switch (char) {
+        case '0': case '1': case '2': case '3': case '4': 
+        case '5': case '6': case '7': case '8': case '9': 
+            return true;
+        default:
+            return false;
+    }
+}
+
+function toDigit(char: string): number | undefined {
+    switch (char) {
+        case '0': 
+            return 0;
+        case '1': 
+            return 1;
+        case '2': 
+            return 2;
+        case '3': 
+            return 3;
+        case '4': 
+            return 4;
+        case '5': 
+            return 5;
+        case '6': 
+            return 6;
+        case '7': 
+            return 7;
+        case '8': 
+            return 8;
+        case '9':
+            return 9;
+        default:
+            return undefined;
+    }
 }

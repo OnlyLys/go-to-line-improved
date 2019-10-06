@@ -1,6 +1,6 @@
 export type Token = 
     TokenNumber 
-    | TokenMinus 
+    | TokenNegativeNumber
     | TokenCommaOrColon 
     | TokenPeriod 
     | TokenDoublePeriod 
@@ -13,14 +13,14 @@ export type Token =
     /** Sequence of digits. */
     interface TokenNumber {
         kind: 'number';
-        // The value is stored as the string representation of the number. We only convert it to the
-        // actual `number` type during parsing.
-        valueStr: string;
+        magnitude: number;
     }
-    /** Symbol: `-`. */
-    interface TokenMinus {
-        kind: 'minus';
-    } 
+
+    /** Sequence of digits with a `-` prefix. */
+    interface TokenNegativeNumber {
+        kind: 'negativeNumber';
+        magnitude: number;
+    }
 
     /** Symbol: `,` or `:`. */
     interface TokenCommaOrColon {

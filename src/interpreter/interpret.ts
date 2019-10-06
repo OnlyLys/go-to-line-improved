@@ -223,11 +223,11 @@ function interpretPosition(
 function interpretLine(varLine: VarLine, document: Readonly<TextDocument>): number {
     const documentEndInd = document.lineCount - 1;
     switch (varLine.kind) {
-        case 'numberOnly': {
+        case 'number': {
             // Exact line number specified. Convert number to `0`-based index by subtracting `1`.
             return round(varLine.value - 1);
         }
-        case 'minusPrefix': {
+        case 'negativeNumber': {
             // Line number relative to the bottom of the document specified.
             return round(documentEndInd - varLine.value);
         }

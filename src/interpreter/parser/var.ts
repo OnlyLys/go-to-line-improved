@@ -40,15 +40,15 @@ export type VarPosition = VarPositionLineWithOptionalColumn | VarPositionColumnO
     }
         
 /** Represents the `LINE` variable in the grammar. */
-export type VarLine = VarLineNumberOnly | VarLineMinusPrefix;
+export type VarLine = VarLineNumber | VarLineNegativeNumber;
 
-    interface VarLineNumberOnly {
-        kind: 'numberOnly';
+    interface VarLineNumber {
+        kind: 'number';
         value: number;
     }
 
-    interface VarLineMinusPrefix {
-        kind: 'minusPrefix';
+    interface VarLineNegativeNumber {
+        kind: 'negativeNumber';
         value: number;
     }
 

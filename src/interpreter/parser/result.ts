@@ -1,23 +1,47 @@
 /** 
- * Variant type used to indicate failures. This is used to avoid throwing exceptions.
+ * Variant-like type used to indicate success or failure of during parsing operations. This is used
+ * to avoid throwing exceptions.
  * 
- * This variant was inspired by Rust. 
+ * This type was inspired by Rust.
  */
-export type Result<T> = Ok<T> | Err;
+export type Result<T> = ResultOk<T> | ResultErr<T>;
 
-    interface Ok<T> {
-        kind: 'ok';
+    interface ResultOk<T> {
+        ok: true;
         value: T;
+        /** 
+         * Transform the value contained within a result type if it is of the `ResultOk` variant,
+         * Otherwise just return the `ResultErr` variant.
+         */
+        andThen: (<U>(transform: (t: T) => U) => Result<U>);
     }
 
-    interface Err { 
-        kind: 'err';
+    interface ResultErr<T> { 
+        ok: false;
+        /** 
+         * Transform the value contained within a result type if it is of the `ResultOk` variant,
+         * Otherwise just return the `ResultErr` variant.
+         */
+        andThen: (<U>(transform: (t: T) => U) => Result<U>);
     }
 
-/** 
- * Transform the value contained within a result type if it is of the `Ok` variant. Otherwise if the
- * result type is `Err` then return `Err` as well.
- */
-export function andThen<T, U>(result: Result<T>, transform: (t: T) => U): Result<U> {
-    return result.kind === 'ok' ? { kind: 'ok', value: transform(result.value) } : result;
+
+export function Ok<T>(value: T): Result<T> {
+    return {
+        ok: true,
+        value,
+        andThen: <U>(transform: (t: T) => U): Result<U> => {
+            return Ok(transform(value));
+        }
+    };
+}
+
+/** Create an `Err` variant. */
+export function Err<T>(): ResultErr<T> {
+    return {
+        ok: false,
+        andThen: <U>(_: (t: T) => U): Result<U> => {
+            return Err();
+        }
+    };
 }

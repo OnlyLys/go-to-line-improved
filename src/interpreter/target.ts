@@ -21,3 +21,4 @@ export type Target = TargetGoTo | TargetSelection;
         selection: Selection;
         quick: boolean;
     }
+    
