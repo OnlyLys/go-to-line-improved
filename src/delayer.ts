@@ -22,8 +22,12 @@ export class Delayer {
      * The time delay will be determined by the `duration` field provided in the constructor.
      */
     public queue(callback: () => void): void {
-        this.clear();
-        this.timer = setTimeout(callback, this.duration);
+        if (this.duration > 0) {
+            this.clear();
+            this.timer = setTimeout(callback, this.duration);
+        } else {
+            callback();
+        }
     }
 
     /** Clear the queued action (if there is one). */   
