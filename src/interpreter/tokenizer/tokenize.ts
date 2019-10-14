@@ -20,7 +20,7 @@ export function tokenize(input: string): TokenStream | undefined {
             let magnitude = toDigit(input[i]) as number;
             // Consume until the end of the number.
             while ((i + 1 < input.length) && isDigit(input[i + 1])) {
-                const nextDigit = ++i;
+                const nextDigit = toDigit(input[++i]) as number;
                 magnitude = (magnitude * 10) + nextDigit;
             }
             tokens.push({ kind: 'number', magnitude });
@@ -31,7 +31,7 @@ export function tokenize(input: string): TokenStream | undefined {
             let magnitude = toDigit(input[++i]) as number;
             // Consume until the end of the number following the `-` sign.
             while ((i + 1 < input.length) && isDigit(input[i + 1])) {
-                const nextDigit = ++i;
+                const nextDigit = toDigit(input[++i]) as number;
                 magnitude = (magnitude * 10) + nextDigit;
             }
             tokens.push({ kind: 'negativeNumber', magnitude });
